@@ -30,4 +30,4 @@ runs:
         git add .
         git commit -m "${MESSAGE}"
         git push origin "${BRANCH}"
-        gh pr create --head "${BRANCH}" --title "${BRANCH}" --body "${MESSAGE}"
+        gh pr create --head "${BRANCH}" --title "${MESSAGE}" --body "${MESSAGE}"
