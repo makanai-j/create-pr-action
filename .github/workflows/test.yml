@@ -14,7 +14,7 @@ jobs:
         run: date > foo.md
       - name: Exercise
         id: exercise
-        uses: ./
+        uses: ./.github/actions/my-action
         with:
           message: Test
       - name: Verify
