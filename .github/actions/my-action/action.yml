@@ -1,13 +1,10 @@
-name: 'My Composite Action'
-description: 'A composite action example'
+name: "My Composite Action"
+description: "A composite action example"
 inputs:
   message:
-    description: 'PR title'
+    description: "PR title"
     required: true
-    default: 'Hello'
-outputs:
-  branch:
-    description: 'Created branch name'
+    default: "Hello"
 runs:
   using: "composite"
   steps:
