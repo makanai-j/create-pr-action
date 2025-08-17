@@ -3,6 +3,9 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./test-ts
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -12,8 +15,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-        working-directory: ./test-ts
       - name: Run tests
         run: |
           npm test
-        working-directory: ./test-ts
