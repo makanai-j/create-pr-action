@@ -11,8 +11,8 @@ jobs:
           node-version: "16"
       - name: Install dependencies
         run: |
-          cd test-ts
           npm install
+        working-directory: ./test-ts
       - name: Run tests
         run: |
           npm test
