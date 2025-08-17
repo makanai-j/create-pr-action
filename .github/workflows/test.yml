@@ -1,5 +1,7 @@
 name: Test action
-on: pull_request
+on:
+  pull_request:
+    types: [synchronize]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,7 +16,7 @@ jobs:
         run: date > foo.md
       - name: Exercise
         id: exercise
-        uses: ./
+        uses: ./.github/actions/my-action
         with:
           message: Test
       - name: Verify
