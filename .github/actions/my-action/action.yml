@@ -1,0 +1,32 @@
+name: "My Composite Action"
+description: "A composite action example"
+inputs:
+  message:
+    description: "PR title"
+    required: true
+    default: "Hello"
+runs:
+  using: "composite"
+  steps:
+    - name: Create branch
+      id: create_branch
+      run: |
+        BRANCH="test-branch-$(date +%s)"
+        git checkout -b "$BRANCH"
+        echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Commit and push
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add .
+        git commit -m "${{ inputs.message }}"
+        git push origin HEAD
+      shell: bash
+    - name: Create PR
+      run: |
+        gh pr create --title "${{ inputs.message }}" --body "Auto PR" --head "$(git rev-parse --abbrev-ref HEAD)"
+      shell: bash
+outputs:
+  branch:
+    value: ${{ steps.create_branch.outputs.branch }}
