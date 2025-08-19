@@ -36,7 +36,7 @@ jobs:
       - name: Comment test result on PR
         if: ${{ always() }}
         run: |
-          gh pr comment "$PR_NUMBER" --body "${{ steps.run_tests.outputs.status }}" --body-file result_clean.txt
+          gh pr comment "$PR_NUMBER" --body "${{ steps.run_tests.outputs.status }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
