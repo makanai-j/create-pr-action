@@ -24,7 +24,7 @@ jobs:
         run: |
           npm test > result.txt 2>&1; exit ${PIPESTATUS[0]}
       - name: Comment test result on PR
-        if: ${{ allways() }}
+        if: ${{ always() }}
         run: |
           gh pr comment "$PR_NUMBER" --body "$(cat result.txt)"
         env:
