@@ -18,4 +18,4 @@ jobs:
       - name: Run tests
         run: |
           npm test
-        if: ${{ contains(github.run_id, '1') }}
+        if: ${{ contains(github.run_id, '11124') }}
