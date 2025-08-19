@@ -22,7 +22,7 @@ jobs:
           npm install
       - name: Run tests
         env:
-          NO_COLOR: true
+          NO_COLOR: "1"
         run: |
           npm test > result.txt 2>&1; exit ${PIPESTATUS[0]}
       - name: Comment test result on PR
