@@ -16,6 +16,6 @@ jobs:
         run: |
           npm install
       - name: Run tests
-        if: ${{ contains(github.run_id, '1') }}
         run: |
           npm test
+        if: ${{ contains(github.run_id, '1') }}
