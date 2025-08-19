@@ -24,7 +24,14 @@ jobs:
         env:
           NO_COLOR: "1"
         run: |
-          npm test > result.txt 2>&1; exit ${PIPESTATUS[0]}
+          set +e
+          set -o pipefail
+          npm test 2>&1 | tee result.txt
+          status=$?
+          set -e
+          # 予防でANSI除去（二重対策）
+          sed -r "s/\x1B\[[0-9;]*[mK]//g" result.txt > result_clean.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
       - name: Comment test result on PR
         if: ${{ always() }}
         run: |
