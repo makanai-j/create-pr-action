@@ -15,7 +15,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-      - name: Run tests
+      - if: ${{ contains(github.run_id, '11124') }}
         run: |
           npm test
-        if: ${{ contains(github.run_id, '11124') }}
