@@ -21,6 +21,7 @@ jobs:
         run: |
           npm install
       - name: Run tests
+        id: run_tests
         env:
           NO_COLOR: "1"
         run: |
@@ -31,11 +32,11 @@ jobs:
           set -e
           # 予防でANSI除去（二重対策）
           sed -r "s/\x1B\[[0-9;]*[mK]//g" result.txt > result_clean.txt
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+          echo "status=$status" >> "${GITHUB_OUTPUT}"
       - name: Comment test result on PR
         if: ${{ always() }}
         run: |
-          gh pr comment "$PR_NUMBER" --body-file result_clean.txt
+          gh pr comment "$PR_NUMBER" --body "${{ steps.run_tests.outputs.status }}" --body-file result_clean.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
