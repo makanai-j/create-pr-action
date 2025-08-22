@@ -44,6 +44,7 @@ jobs:
           cat result_clean.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
   call:
+    if: ${{ always() }}
     needs: test
     uses: ./.github/workflows/reusable.yml
     with:
