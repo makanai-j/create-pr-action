@@ -15,10 +15,6 @@ on:
     secrets:
       github_token:
         description: "GitHub token for authentication"
-    outputs:
-      branch:
-        description: "Branch created for PR"
-        value: ${{ steps.create_branch.outputs.branch }}
 jobs:
   create_pr:
     runs-on: ubuntu-latest
