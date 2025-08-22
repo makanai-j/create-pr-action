@@ -59,3 +59,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+  echo:
+    if: ${{ always() }}
+    needs: call
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo PR BRANCH
+        run: echo "${{ needs.call.outputs.branch }}"
+    permissions:
+      contents: read
+      pull-requests: read
