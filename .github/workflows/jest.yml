@@ -37,14 +37,23 @@ jobs:
           # 予防でANSI除去（二重対策）
           sed -r "s/\x1B\[[0-9;]*[mK]//g" result.txt > result_clean.txt
           echo "status=$status" >> "${GITHUB_OUTPUT}"
+      - name: Set test result output
+        id: set_result
+        run: |
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          cat result_clean.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+    outputs:
+      result: ${{ steps.set_result.outputs.result }}
+
   call:
+    needs: test
     uses: ./.github/workflows/reusable.yml
     with:
       title: "Jest Test Results"
-      message: "$( cat result_clean.txt )"
+      message: ${{ needs.test.outputs.result }}
     secrets:
       github_token: ${{ secrets.GITHUB_TOKEN }}
-    needs: test
     permissions:
       contents: read
       pull-requests: write
