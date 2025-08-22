@@ -22,7 +22,7 @@ jobs:
           npm install
       - name: Run ESLint
         run: |
-          eslint ./index.ts
+          npm run lint
       - name: Run tests
         id: run_tests
         env:
