@@ -22,7 +22,8 @@ jobs:
           npm install
       - name: Run ESLint
         run: |
-          npm run lint
+          set -o pipefail
+          npm run lint 2>&1 | tee result.txt
       - name: Run tests
         id: run_tests
         env:
@@ -31,7 +32,7 @@ jobs:
         run: |
           set +e
           set -o pipefail
-          npm test 2>&1 | tee result.txt
+          npm test 2>&1 | tee -a result.txt
           status=$?
           set -e
           # 予防でANSI除去（二重対策）
