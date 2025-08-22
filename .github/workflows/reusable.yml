@@ -16,6 +16,10 @@ on:
       secrets_gh_token:
         required: true
         description: "GitHub token for authentication"
+    outputs:
+      pr_url:
+        description: "URL of the created PR"
+        value: ${{ jobs.create_pr.steps.create_branch.outputs.branch }}
 jobs:
   create_pr:
     runs-on: ubuntu-latest
