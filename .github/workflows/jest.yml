@@ -41,8 +41,9 @@ jobs:
         id: set_result
         if: ${{ always() }}
         run: |
-          result="$(cat result_clean.txt)"
-          echo "result=$result" >> $GITHUB_OUTPUT
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          cat result_clean.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
     outputs:
       result: ${{ steps.set_result.outputs.result }}
   call:
