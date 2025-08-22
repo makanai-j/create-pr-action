@@ -50,7 +50,7 @@ jobs:
       title: "Jest Test Results"
       message: ${{ needs.test.outputs.result }}
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      secrets_gh_token: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: read
       pull-requests: write
