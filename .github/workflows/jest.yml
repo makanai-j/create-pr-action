@@ -20,6 +20,9 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+      - name: Run ESLint
+        run: |
+          npx eslint ./index.ts
       - name: Run tests
         id: run_tests
         env:
