@@ -40,9 +40,10 @@ jobs:
       - name: Set test result output
         id: set_result
         run: |
-          echo "result<<EOF" >> $GITHUB_OUTPUT
-          cat result_clean.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          result="$(cat result_clean.txt)"
+          echo "result=$result" >> $GITHUB_OUTPUT
+    outputs:
+      result: ${{ steps.set_result.outputs.result }}
   call:
     if: ${{ always() }}
     needs: test
@@ -54,4 +55,5 @@ jobs:
       secrets_gh_token: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
+      pull-requests: write
       pull-requests: write
