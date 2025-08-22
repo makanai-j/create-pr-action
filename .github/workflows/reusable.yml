@@ -3,10 +3,12 @@ on:
   workflow_call:
     inputs:
       title:
+        type: string
         description: "PR title"
         required: true
         default: "Hello"
       message:
+        type: string
         description: "PR message"
         required: true
         default: "Auto PR"

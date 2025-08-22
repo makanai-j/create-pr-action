@@ -41,7 +41,7 @@ jobs:
     uses: ./.github/workflows/reusable.yml
     with:
       title: "Jest Test Results"
-      message: cat result_clean.txt
+      message: "$( cat result_clean.txt )"
     secrets:
       github_token: ${{ secrets.GITHUB_TOKEN }}
     needs: test
