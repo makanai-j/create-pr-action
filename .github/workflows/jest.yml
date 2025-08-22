@@ -39,6 +39,7 @@ jobs:
           echo "status=$status" >> "${GITHUB_OUTPUT}"
       - name: Set test result output
         id: set_result
+        if: ${{ always() }}
         run: |
           result="$(cat result_clean.txt)"
           echo "result=$result" >> $GITHUB_OUTPUT
