@@ -36,8 +36,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Commit and push
         run: |
-          git add .
-          git commit -m "AUTO PR"
+          git commit -m "AUTO PR" --allow-empty
           git push origin HEAD
       - name: Create PR
         run: |
