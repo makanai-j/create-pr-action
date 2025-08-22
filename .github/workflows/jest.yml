@@ -35,6 +35,8 @@ jobs:
           npm test 2>&1 | tee -a result.txt
           status=$?
           set -e
+      - name: Clean up ANSI codes
+        run: |
           # 予防でANSI除去（二重対策）
           sed -r "s/\x1B\[[0-9;]*[mK]//g" result.txt > result_clean.txt
           echo "status=$status" >> "${GITHUB_OUTPUT}"
