@@ -1,20 +1,71 @@
 name: Jest test workflow
-on: push
+on: [push, workflow_dispatch]
 jobs:
   test:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./test-ts
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
+          cache-dependency-path: ./test-ts/package-lock.json
       - name: Install dependencies
         run: |
           npm install
-      - name: Run tests
+      - name: Run ESLint
         run: |
-          npm test
+          set -o pipefail
+          npm run lint 2>&1 | tee result.txt
+      - name: Run tests
+        id: run_tests
+        env:
+          NO_COLOR: "1"
+        if: ${{ always() }}
+        run: |
+          set +e
+          set -o pipefail
+          npm test 2>&1 | tee -a result.txt
+          status=$?
+          set -e
+          # 予防でANSI除去（二重対策）
+          sed -r "s/\x1B\[[0-9;]*[mK]//g" result.txt > result_clean.txt
+          echo "status=$status" >> "${GITHUB_OUTPUT}"
+      - name: Set test result output
+        id: set_result
+        if: ${{ always() }}
+        run: |
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          cat result_clean.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+    outputs:
+      result: ${{ steps.set_result.outputs.result }}
+  call:
+    if: ${{ always() }}
+    needs: test
+    uses: ./.github/workflows/reusable.yml
+    with:
+      title: "Jest Test Results"
+      message: ${{ needs.test.outputs.result }}
+    secrets:
+      secrets_gh_token: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      pull-requests: write
+  echo:
+    if: ${{ always() }}
+    needs: call
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo PR BRANCH
+        run: echo "${{ needs.call.outputs.branch }}"
+    permissions:
+      contents: read
+      pull-requests: read

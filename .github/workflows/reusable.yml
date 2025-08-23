@@ -1,0 +1,51 @@
+name: Reusable workflow for pr
+on:
+  workflow_call:
+    inputs:
+      title:
+        type: string
+        description: "PR title"
+        required: true
+        default: "Hello"
+      message:
+        type: string
+        description: "PR message"
+        required: true
+        default: "Auto PR"
+    secrets:
+      secrets_gh_token:
+        required: true
+        description: "GitHub token for authentication"
+    outputs:
+      branch:
+        description: "URL of the created PR"
+        value: ${{ jobs.create_pr.outputs.branch }}
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      branch: ${{ steps.create_branch.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create branch
+        id: create_branch
+        run: |
+          BRANCH="test-branch-$(date +%s)"
+          git switch -c "$BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+      - name: git config settings
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+      - name: Commit and push
+        run: |
+          git commit -m "AUTO PR" --allow-empty
+          git push origin HEAD
+      - name: Create PR
+        run: |
+          gh pr create --title "${{ inputs.title }}" --body "${{ inputs.message }}"  --head "$(git rev-parse --abbrev-ref HEAD)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.secrets_gh_token }}

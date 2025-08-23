@@ -5,6 +5,9 @@ inputs:
     description: "PR title"
     required: true
     default: "Hello"
+outputs:
+  branch:
+    value: ${{ steps.create_branch.outputs.branch }}
 runs:
   using: "composite"
   steps:
@@ -15,10 +18,13 @@ runs:
         git checkout -b "$BRANCH"
         echo "branch=$BRANCH" >> $GITHUB_OUTPUT
       shell: bash
-    - name: Commit and push
+    - name: git config settings
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
+      shell: bash
+    - name: Commit and push
+      run: |
         git add .
         git commit -m "${{ inputs.message }}"
         git push origin HEAD
@@ -27,6 +33,3 @@ runs:
       run: |
         gh pr create --title "${{ inputs.message }}" --body "Auto PR" --head "$(git rev-parse --abbrev-ref HEAD)"
       shell: bash
-outputs:
-  branch:
-    value: ${{ steps.create_branch.outputs.branch }}
